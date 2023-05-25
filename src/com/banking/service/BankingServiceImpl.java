@@ -2,6 +2,7 @@ package com.banking.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import com.banking.dao.BankingDAO;
@@ -19,7 +20,7 @@ import com.banking.interfaces.Transactable;
 import com.banking.io.InputHandler;
 
 public class BankingServiceImpl implements BankingService {
-	private final InputHandler inputHandler;
+	private InputHandler inputHandler;
 	private BankingDAO bankingDAO;
 	private PersistenceDAO persistenceDAO;
 	
@@ -126,6 +127,24 @@ public class BankingServiceImpl implements BankingService {
 
 	public double calculateInterest(BankAccount bankAccount) {
 		return bankAccount.calculateInterest();
+	}
+
+	public List<Customer> sortCustomersByName() {
+		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
+		sortedCustomers.sort(Comparator.comparing(Customer::getName));
+        return sortedCustomers;
+	}
+
+	public List<Customer> sortCustomersById() {
+		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
+		sortedCustomers.sort(Comparator.comparingInt(Customer::getId));
+        return sortedCustomers;
+	}
+
+	public List<Customer> sortCustomersByBalance() {
+		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
+		sortedCustomers.sort(Comparator.comparing(customer -> customer.getBankAccount().getBalance()));
+        return sortedCustomers;
 	}
 	
 }

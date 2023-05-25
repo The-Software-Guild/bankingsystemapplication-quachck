@@ -1,6 +1,8 @@
 package com.banking.controller;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.banking.dto.BankAccount;
 import com.banking.dto.Customer;
@@ -186,12 +188,36 @@ public class BankingController {
 
 	
 	private void sortCustomerData() {
-	    // Placeholder method for sorting customer data
-		System.out.println("Sorting customer data...");
+        System.out.println("Option 4: Sort Customer Data");
+        
+        List<Customer> sortedCustomers = new ArrayList<>();
+        int choice = inputHandler.readInt("Sort by:\n1. Customer Names\n2. Customer IDs\n3. Customer Bank Balance");
+
+        switch (choice) {
+        case 1:
+            sortedCustomers = bankingService.sortCustomersByName();
+            System.out.println("Customers sorted by names:");
+            break;
+        case 2:
+            sortedCustomers = bankingService.sortCustomersById();
+            System.out.println("Customers sorted by IDs:");
+            break;
+        case 3:
+            sortedCustomers = bankingService.sortCustomersByBalance();
+            System.out.println("Customers sorted by bank balance:");
+            break;
+        default:
+            System.out.println("Invalid choice.");
+            return;
+	    }
+	
+	    for (Customer customer : sortedCustomers) {
+	        System.out.println(customer.toString());
+	    }   
 	}
 	
 	private void persistCustomerData() {
-	    System.out.println("Persisting customer data...");
+	    System.out.println("Option 5: Persist Customer Data");
 
 	    int choice = inputHandler.readInt("Choose method of persistence: \n1. Filesystem\n2. Database\n");
 
