@@ -13,6 +13,7 @@ import com.banking.dto.BankAccount;
 import com.banking.dto.Customer;
 import com.banking.dto.FixedDepositAccount;
 import com.banking.dto.SavingsAccount;
+import com.banking.exceptions.CustomerNotFoundException;
 import com.mysql.jdbc.Statement;
 
 public class DatabaseStorageDAO implements PersistenceDAO {
@@ -241,6 +242,47 @@ public class DatabaseStorageDAO implements PersistenceDAO {
         return null;
     }
 
+    @Override
+    public Customer findCustomerByName(String name) throws CustomerNotFoundException {
+        Connection connection = openConnection();
+        if (connection == null) {
+            System.out.println("Could not establish a connection with the database");
+            return null;
+        }
+
+        try {
+            String sql = "SELECT * FROM customer WHERE name = ?";
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, name);
+            ResultSet results = statement.executeQuery();
+
+            if (results.next()) {
+                int id = results.getInt("id");
+                String customerName = results.getString("name");
+                int age = results.getInt("age");
+                int mobileNumber = results.getInt("mobile_number");
+                String passportNumber = results.getString("passport_number");
+                LocalDate dob = results.getDate("dob").toLocalDate();
+                
+                BankAccount bankAccount = retrieveBankAccountForCustomer(id, connection);
+                
+                Customer customer = new Customer(customerName, age, mobileNumber, passportNumber, dob);
+                customer.setId(id);
+                customer.setBankAccount(bankAccount);
+                
+                return customer;
+            } else {
+                throw new CustomerNotFoundException("Customer with name: " + name + " not found.");
+            }
+        } catch (SQLException e) {
+            System.out.println("An error occurred while retrieving data from the database");
+            e.printStackTrace();
+            return null;
+        } finally {
+            closeConnection(connection);
+        }
+    }
+
 	
 	public Connection openConnection() {
 		//register for type 4 drive(pure java)
@@ -266,5 +308,4 @@ public class DatabaseStorageDAO implements PersistenceDAO {
 			System.out.println(e.getMessage());
 		}
 	}
-
 }

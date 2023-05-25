@@ -42,4 +42,14 @@ public class BankingDAOImpl implements BankingDAO {
 	public List<Customer> getAllCustomers() {
 		return customers;
 	}
+
+	@Override
+	public Customer findCustomerByName(String name) throws CustomerNotFoundException {
+		for (Customer customer : customers) {
+            if (customer.getName().equals(name)) {
+                return customer;
+            }
+        }
+        throw new CustomerNotFoundException("Customer not found with name: " + name);
+	}
 }

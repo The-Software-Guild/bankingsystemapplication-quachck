@@ -146,5 +146,11 @@ public class BankingServiceImpl implements BankingService {
 		sortedCustomers.sort(Comparator.comparing(customer -> customer.getBankAccount().getBalance()));
         return sortedCustomers;
 	}
+
+	@Override
+	public Customer findCustomerByName(String name) throws CustomerNotFoundException {
+		persistenceDAO = new DatabaseStorageDAO();
+		return persistenceDAO.findCustomerByName(name);
+	}
 	
 }

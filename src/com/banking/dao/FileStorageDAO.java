@@ -3,6 +3,7 @@ package com.banking.dao;
 import java.util.List;
 
 import com.banking.dto.Customer;
+import com.banking.exceptions.CustomerNotFoundException;
 
 public class FileStorageDAO implements PersistenceDAO {
 
@@ -14,6 +15,12 @@ public class FileStorageDAO implements PersistenceDAO {
 
 	@Override
 	public List<Customer> retrieveAllCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Customer findCustomerByName(String name) throws CustomerNotFoundException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -8,6 +8,7 @@ import com.banking.exceptions.CustomerNotFoundException;
 public interface BankingDAO {
 	void createCustomer(Customer customer);
 	Customer findCustomerById(int id) throws CustomerNotFoundException;
+	Customer findCustomerByName(String name) throws CustomerNotFoundException;
 	void updateCustomer(int id, Customer updatedCustomer) throws CustomerNotFoundException;
 	List<Customer> getAllCustomers();
 }

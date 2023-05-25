@@ -75,7 +75,8 @@ public class BankingController {
 	
 	private void createCustomer() {
 		printDivider();
-		System.out.println("1. Creating new customer data...");
+		
+		System.out.println("1. Creating new customer data.");
 		
 		// get customer attributes from console
         String name = inputHandler.readString("Enter Name:");
@@ -91,7 +92,8 @@ public class BankingController {
 	
 	private void assignBankAccountToCustomer() {
 		printDivider();
-		System.out.println("Assigning bank account to customer...");
+		
+		System.out.println("Option 2. Assigning bank account to customer.");
 		
 		int id;
 	    Customer customer = null;
@@ -124,7 +126,8 @@ public class BankingController {
 	
 	private void displayCustomerActions() {
 	    printDivider();
-	    System.out.println("Option 3: Display balance or interest earned of a Customer");
+	    
+	    System.out.println("Option 3: Display balance or interest earned of a customer.");
 
 	    int id = inputHandler.readInt("Please enter customer ID:");
 
@@ -188,7 +191,9 @@ public class BankingController {
 
 	
 	private void sortCustomerData() {
-        System.out.println("Option 4: Sort Customer Data");
+		printDivider();
+		
+        System.out.println("Option 4: Sort customer data.");
         
         List<Customer> sortedCustomers = new ArrayList<>();
         int choice = inputHandler.readInt("Sort by:\n1. Customer Names\n2. Customer IDs\n3. Customer Bank Balance");
@@ -213,33 +218,50 @@ public class BankingController {
 	
 	    for (Customer customer : sortedCustomers) {
 	        System.out.println(customer.toString());
-	    }   
+	    }
+	    
+	    printDivider();
 	}
 	
 	private void persistCustomerData() {
-	    System.out.println("Option 5: Persist Customer Data");
+		printDivider();
+	    System.out.println("Option 5: Persist customer data.");
 
 	    int choice = inputHandler.readInt("Choose method of persistence: \n1. Filesystem\n2. Database\n");
 
-	    // Call service method
 	    try {
 	        bankingService.persistCustomerData(choice);
 	    } catch (Exception e) {
 	        System.out.println(e.getMessage());
 	    }
+	    
+	    printDivider();
 	}
-
 	
 	private void showAllCustomers() {
-		System.out.println("Showing all customers...");
+		printDivider();
+		
+		System.out.println("Option 6: Show all customers.");
 		
 		int choice = inputHandler.readInt("Choose storage type: \n1. Filesystem\n2. Database\n");
 		System.out.println(bankingService.getAllCustomers(choice));
+		
+		printDivider();
 	}
 	
 	private void searchCustomersByName() {
-	    // Placeholder method for searching customers by name
-		System.out.println("Searching customers by name...");
+		printDivider();
+		
+		System.out.println("Option 7: Search customer by name.");
+		String name = inputHandler.readString("Enter the customer name you wish to search on database:");
+		
+		try {
+			bankingService.findCustomerByName(name);
+		} catch (CustomerNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+		
+		printDivider();		
 	}
 	
 	private void printDivider() {
