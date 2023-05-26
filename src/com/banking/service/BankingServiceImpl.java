@@ -23,60 +23,66 @@ public class BankingServiceImpl implements BankingService {
 	private InputHandler inputHandler;
 	private BankingDAO bankingDAO;
 	private PersistenceDAO persistenceDAO;
-	
+
 	public BankingServiceImpl() {
-        bankingDAO = new BankingDAOImpl();
-        this.inputHandler = new InputHandler();
-    }
+		bankingDAO = new BankingDAOImpl();
+		this.inputHandler = new InputHandler();
+	}
 
 	@Override
 	public void createCustomer(Customer customer) {
 		bankingDAO.createCustomer(customer);
 	}
-	
+
 	@Override
-	public Customer findCustomerById(int id) throws CustomerNotFoundException{
+	public Customer findCustomerById(int id) throws CustomerNotFoundException {
 		return bankingDAO.findCustomerById(id);
 	}
 
 	@Override
 	public void updateCustomer(int id, Customer updatedCustomer) throws CustomerNotFoundException {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	public void assignBankAccountToCustomer(int id, long accountNumber, long bsbCode, String bankName,
 			LocalDate openingDate, int bankAccountType) {
 		Customer customer = null;
-		
+
 		try {
 			customer = bankingDAO.findCustomerById(id);
 		} catch (CustomerNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 
-	    BankAccount bankAccount;
-	    double balance;
+		BankAccount bankAccount;
+		double balance;
 
-	    if (bankAccountType == 1) {
-	    	int isSalaryAccount = inputHandler.readInt("What type of savings account do you you want to open?\n1. Salary Account\n2. Non-Salary Account"); // 1 = salary, 2 = non-salary
-        	if (isSalaryAccount == 1) {
-        		balance = 0;
-        		bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, true);
-        	} else { // assume user either picks 1 or 2, validation not done yet
-        		balance = 100;
-        		bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, false);
-        	}
-	    } else {
-	        // Logic for creating FixedDepositAccount
-	        bankAccount = new FixedDepositAccount(accountNumber, bsbCode, bankName, 100, openingDate, 1000, 1);
-	    }
+		if (bankAccountType == 1) {
+			int isSalaryAccount = inputHandler.readInt(
+					"What type of savings account do you you want to open?\n1. Salary Account\n2. Non-Salary Account"); // 1
+																														// =
+																														// salary,
+																														// 2
+																														// =
+																														// non-salary
+			if (isSalaryAccount == 1) {
+				balance = 0;
+				bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, true);
+			} else { // assume user either picks 1 or 2, validation not done yet
+				balance = 100;
+				bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, false);
+			}
+		} else {
+			// Logic for creating FixedDepositAccount
+			bankAccount = new FixedDepositAccount(accountNumber, bsbCode, bankName, 100, openingDate, 1000, 1);
+		}
 
-	    // Assign bank account to the customer
-	    customer.setBankAccount(bankAccount);
+		// Assign bank account to the customer
+		customer.setBankAccount(bankAccount);
 
-	    // Update customer in storage
-	    try {
+		// Update customer in storage
+		try {
 			bankingDAO.updateCustomer(id, customer);
 		} catch (CustomerNotFoundException e) {
 			System.out.println(e.getMessage());
@@ -84,22 +90,23 @@ public class BankingServiceImpl implements BankingService {
 	}
 
 	public void persistCustomerData(int choice) throws Exception {
-        List<Customer> allCustomers = bankingDAO.getAllCustomers();
-        if (choice == 1) {
-            persistenceDAO = new FileStorageDAO();
-        } else if (choice == 2) {
-            persistenceDAO = new DatabaseStorageDAO();
-        } else {
-            throw new Exception("Invalid persistence option");
-        }
-        persistenceDAO.saveAllCustomers(allCustomers);
-    }
+		List<Customer> allCustomers = bankingDAO.getAllCustomers();
+		if (choice == 1) {
+			persistenceDAO = new FileStorageDAO();
+		} else if (choice == 2) {
+			persistenceDAO = new DatabaseStorageDAO();
+		} else {
+			throw new Exception("Invalid persistence option");
+		}
+		persistenceDAO.saveAllCustomers(allCustomers);
+	}
 
 	@Override
 	public List<Customer> getAllCustomers(int choice) {
 		List<Customer> customers = new ArrayList<>();
 		if (choice == 1) {
-			
+			persistenceDAO = new FileStorageDAO();
+			customers = persistenceDAO.retrieveAllCustomers();
 		} else if (choice == 2) {
 			persistenceDAO = new DatabaseStorageDAO();
 			customers = persistenceDAO.retrieveAllCustomers();
@@ -132,19 +139,19 @@ public class BankingServiceImpl implements BankingService {
 	public List<Customer> sortCustomersByName() {
 		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
 		sortedCustomers.sort(Comparator.comparing(Customer::getName));
-        return sortedCustomers;
+		return sortedCustomers;
 	}
 
 	public List<Customer> sortCustomersById() {
 		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
 		sortedCustomers.sort(Comparator.comparingInt(Customer::getId));
-        return sortedCustomers;
+		return sortedCustomers;
 	}
 
 	public List<Customer> sortCustomersByBalance() {
 		List<Customer> sortedCustomers = bankingDAO.getAllCustomers();
 		sortedCustomers.sort(Comparator.comparing(customer -> customer.getBankAccount().getBalance()));
-        return sortedCustomers;
+		return sortedCustomers;
 	}
 
 	@Override
@@ -152,5 +159,5 @@ public class BankingServiceImpl implements BankingService {
 		persistenceDAO = new DatabaseStorageDAO();
 		return persistenceDAO.findCustomerByName(name);
 	}
-	
+
 }

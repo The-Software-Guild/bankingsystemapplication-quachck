@@ -1,5 +1,14 @@
 package com.banking.dao;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.banking.dto.Customer;
@@ -9,14 +18,38 @@ public class FileStorageDAO implements PersistenceDAO {
 
 	@Override
 	public void saveAllCustomers(List<Customer> customers) {
-		// TODO Auto-generated method stub
-
+		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
+				new BufferedOutputStream(new FileOutputStream("C:\\Users\\quach\\C353-W\\customers.txt")))) {
+			for (Customer customer : customers) {
+				objectOutputStream.writeObject(customer);
+			}
+		} catch (IOException e) {
+			System.out.println("An error occurred while saving customer data");
+			e.printStackTrace();
+		}
 	}
 
 	@Override
 	public List<Customer> retrieveAllCustomers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Customer> customers = new ArrayList<>();
+
+		try (ObjectInputStream objectInputStream = new ObjectInputStream(
+				new BufferedInputStream(new FileInputStream("C:\\Users\\quach\\C353-W\\customers.txt")))) {
+			while (true) {
+				try {
+					Customer customer = (Customer) objectInputStream.readObject();
+					customers.add(customer);
+				} catch (EOFException e) {
+					// End of file reached
+					break;
+				}
+			}
+		} catch (IOException | ClassNotFoundException e) {
+			System.out.println("An error occurred while retrieving customer data");
+			e.printStackTrace();
+		}
+
+		return customers;
 	}
 
 	@Override

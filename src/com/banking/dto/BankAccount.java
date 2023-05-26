@@ -3,42 +3,41 @@ package com.banking.dto;
 import java.time.LocalDate;
 
 public abstract class BankAccount {
-    private long accountNumber;
-    private long bsbCode;
-    private String bankName;
-    private double balance;
-    private LocalDate openingDate;
+	private long accountNumber;
+	private long bsbCode;
+	private String bankName;
+	private double balance;
+	private LocalDate openingDate;
 
-    public BankAccount() {
+	public BankAccount() {
 
-    }
+	}
 
-    public BankAccount(long accountNumber, long bsbCode, String bankName, double balance, LocalDate openingDate) {
-        this.accountNumber = accountNumber;
-        this.bsbCode = bsbCode;
-        this.bankName = bankName;
-        this.balance = balance;
-        this.openingDate = openingDate;
-    }
+	public BankAccount(long accountNumber, long bsbCode, String bankName, double balance, LocalDate openingDate) {
+		this.accountNumber = accountNumber;
+		this.bsbCode = bsbCode;
+		this.bankName = bankName;
+		this.balance = balance;
+		this.openingDate = openingDate;
+	}
 
-    public double getBalance() {
-        return balance;
-    }
+	public double getBalance() {
+		return balance;
+	}
 
-    public void setBalance(double balance) {
-        this.balance = balance;
-    }
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 
-    public LocalDate getOpeningDate() {
-        return openingDate;
-    }
+	public LocalDate getOpeningDate() {
+		return openingDate;
+	}
 
-    public void setOpeningDate(LocalDate openingDate) {
-        this.openingDate = openingDate;
-    }
-    
+	public void setOpeningDate(LocalDate openingDate) {
+		this.openingDate = openingDate;
+	}
 
-    public long getAccountNumber() {
+	public long getAccountNumber() {
 		return accountNumber;
 	}
 
@@ -63,13 +62,9 @@ public abstract class BankAccount {
 	}
 
 	public String toString() {
-        return "Account Number: " + accountNumber +
-                "\nBSB Code: " + bsbCode +
-                "\nBank Name: " + bankName +
-                "\nBalance: " + balance +
-                "\nOpening Date: " + openingDate;
-    }
+		return "Account Number: " + accountNumber + "\nBSB Code: " + bsbCode + "\nBank Name: " + bankName
+				+ "\nBalance: " + balance + "\nOpening Date: " + openingDate;
+	}
 
-    public abstract double calculateInterest();
+	public abstract double calculateInterest();
 }
-

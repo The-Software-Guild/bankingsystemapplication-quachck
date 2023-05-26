@@ -7,6 +7,6 @@ import com.banking.exceptions.CustomerNotFoundException;
 
 public interface PersistenceDAO {
 	void saveAllCustomers(List<Customer> customers);
-    List<Customer> retrieveAllCustomers();
-    Customer findCustomerByName(String name) throws CustomerNotFoundException;
+	List<Customer> retrieveAllCustomers();
+	Customer findCustomerByName(String name) throws CustomerNotFoundException;
 }

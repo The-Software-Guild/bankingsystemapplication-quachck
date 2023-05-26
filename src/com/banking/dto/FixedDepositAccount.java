@@ -1,19 +1,20 @@
 package com.banking.dto;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
-public class FixedDepositAccount extends BankAccount {
-    private double depositAmount;
-    private int tenure;
+public class FixedDepositAccount extends BankAccount implements Serializable {
+	private double depositAmount;
+	private int tenure;
 
-    public FixedDepositAccount(long accountNumber, long bsbCode, String bankName, double balance, LocalDate openingDate,
-            double depositAmount, int tenure) {
-        super(accountNumber, bsbCode, bankName, balance, openingDate);
-        this.depositAmount = depositAmount;
-        this.tenure = tenure;
-    }
-      
-    public double getDepositAmount() {
+	public FixedDepositAccount(long accountNumber, long bsbCode, String bankName, double balance, LocalDate openingDate,
+			double depositAmount, int tenure) {
+		super(accountNumber, bsbCode, bankName, balance, openingDate);
+		this.depositAmount = depositAmount;
+		this.tenure = tenure;
+	}
+
+	public double getDepositAmount() {
 		return depositAmount;
 	}
 
@@ -30,17 +31,14 @@ public class FixedDepositAccount extends BankAccount {
 	}
 
 	@Override
-    public double calculateInterest() {
-        double interestRate = 0.08; // 8% per annum
-        double interest = depositAmount * interestRate * tenure;
-        return interest;
-    }
-    
-    @Override
-    public String toString() {
-        return super.toString() + 
-                "\nDeposit Amount: " + depositAmount +
-                "\nTenure: " + tenure + " years";
-    }
-}
+	public double calculateInterest() {
+		double interestRate = 0.08; // 8% per annum
+		double interest = depositAmount * interestRate * tenure;
+		return interest;
+	}
 
+	@Override
+	public String toString() {
+		return super.toString() + "\nDeposit Amount: " + depositAmount + "\nTenure: " + tenure + " years";
+	}
+}
