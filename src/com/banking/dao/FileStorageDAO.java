@@ -19,7 +19,7 @@ public class FileStorageDAO implements PersistenceDAO {
 	@Override
 	public void saveAllCustomers(List<Customer> customers) {
 		try (ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new BufferedOutputStream(new FileOutputStream("C:\\Users\\quach\\C353-W\\customers.txt")))) {
+				new BufferedOutputStream(new FileOutputStream("C:\\customers.txt")))) {
 			for (Customer customer : customers) {
 				objectOutputStream.writeObject(customer);
 			}
@@ -34,7 +34,7 @@ public class FileStorageDAO implements PersistenceDAO {
 		List<Customer> customers = new ArrayList<>();
 
 		try (ObjectInputStream objectInputStream = new ObjectInputStream(
-				new BufferedInputStream(new FileInputStream("C:\\Users\\quach\\C353-W\\customers.txt")))) {
+				new BufferedInputStream(new FileInputStream("C:\\customers.txt")))) {
 			while (true) {
 				try {
 					Customer customer = (Customer) objectInputStream.readObject();
