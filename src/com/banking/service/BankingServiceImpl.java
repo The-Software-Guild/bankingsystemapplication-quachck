@@ -60,12 +60,7 @@ public class BankingServiceImpl implements BankingService {
 
 		if (bankAccountType == 1) {
 			int isSalaryAccount = inputHandler.readInt(
-					"What type of savings account do you you want to open?\n1. Salary Account\n2. Non-Salary Account"); // 1
-																														// =
-																														// salary,
-																														// 2
-																														// =
-																														// non-salary
+					"What type of savings account do you you want to open?\n1. Salary Account\n2. Non-Salary Account");
 			if (isSalaryAccount == 1) {
 				balance = 0;
 				bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, true);
@@ -74,8 +69,25 @@ public class BankingServiceImpl implements BankingService {
 				bankAccount = new SavingsAccount(accountNumber, bsbCode, bankName, balance, openingDate, false);
 			}
 		} else {
-			// Logic for creating FixedDepositAccount
-			bankAccount = new FixedDepositAccount(accountNumber, bsbCode, bankName, 100, openingDate, 1000, 1);
+			double depositAmount = 0.0;
+			do {
+				depositAmount = inputHandler
+						.readDouble("Enter the deposit amount for your fixed deposit account (minimum 1000): ");
+				if (depositAmount < 1000) {
+					System.out.println("Deposit amount is less than the minimum requirement (1000). Please try again.");
+				}
+			} while (depositAmount < 1000);
+
+			int tenure = 0;
+			do {
+				tenure = inputHandler.readInt(
+						"Enter the tenure in years for your fixed deposit account (between 1 to 7 inclusive): ");
+				if (tenure < 1 || tenure > 7) {
+					System.out.println("Invalid tenure. The tenure must be between 1 and 7 years. Please try again.");
+				}
+			} while (tenure < 1 || tenure > 7);
+
+			bankAccount = new FixedDepositAccount(accountNumber, bsbCode, bankName, depositAmount, openingDate, depositAmount, tenure);
 		}
 
 		// Assign bank account to the customer
